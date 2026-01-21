@@ -4,9 +4,10 @@ import Navbar from "./components/Navbar";
 import EmployeeTable from "./components/EmployeeTable";
 import DepartmentPage from "./pages/DepartmentPage";
 import EmployeeModal from "./components/EmployeeModal";
+import HeroSection from "./components/HeroSection";
 import { AnimatePresence, motion } from "framer-motion";
 
-// 🔹 Separate animated routes component
+// 🔹 Animated routes wrapper
 function AnimatedRoutes({ refreshKey }) {
   const location = useLocation();
 
@@ -56,6 +57,11 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar onAddClick={() => setOpen(true)} />
+
+      {/* HERO SECTION */}
+      <div className="px-6 pt-6">
+        <HeroSection onAddClick={() => setOpen(true)} />
+      </div>
 
       {/* ADD / EDIT MODAL */}
       <EmployeeModal
