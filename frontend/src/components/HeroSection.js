@@ -1,36 +1,51 @@
 import { motion } from "framer-motion";
+import teamImage from "../assets/team-illustration.png";
 
-function HeroSection({ onAddClick }) {
+function HeroSection() {
   return (
-    <section className="bg-gradient-to-r from-purple-600 to-violet-500 text-white rounded-2xl p-10 mb-8 shadow-lg">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="flex flex-col md:flex-row items-center justify-between gap-6"
-      >
+    <section className="bg-gradient-to-r from-purple-600 to-violet-500 text-white rounded-2xl p-8 md:p-12 mb-8 shadow-lg overflow-hidden">
+      <div className="grid md:grid-cols-2 gap-10 items-center">
+        
         {/* LEFT CONTENT */}
-        <div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-3">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
             Employee Management System
           </h1>
-          <p className="text-purple-100 max-w-xl">
-            Manage employees efficiently across departments.  
-            Add, edit, filter, export reports, and keep everything organized
-            with a clean and animated dashboard.
+          <p className="text-purple-100 leading-relaxed max-w-lg">
+            A modern dashboard to manage employees across departments.
+            Perform CRUD operations, filtering, exports, and role-based organization
+            with smooth UI interactions.
           </p>
-        </div>
+        </motion.div>
 
-        {/* RIGHT ACTION */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onAddClick}
-          className="bg-yellow-400 text-black px-6 py-3 rounded-xl font-semibold shadow hover:bg-yellow-300 transition"
+        {/* RIGHT IMAGE WITH ANIMATION */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          whileHover={{ scale: 1.03 }}
+          className="relative"
         >
-          + Add New Employee
-        </motion.button>
-      </motion.div>
+          <motion.img
+            src={teamImage}
+            alt="Team illustration"
+            className="w-full max-w-md mx-auto drop-shadow-2xl"
+            animate={{
+              y: [0, -12, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </motion.div>
+
+      </div>
     </section>
   );
 }

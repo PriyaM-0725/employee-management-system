@@ -59,9 +59,10 @@ function App() {
       <Navbar onAddClick={() => setOpen(true)} />
 
       {/* HERO SECTION */}
-      <div className="px-6 pt-6">
-        <HeroSection onAddClick={() => setOpen(true)} />
-      </div>
+<div className="px-6 pt-6">
+  <HeroSection />
+</div>
+
 
       {/* ADD / EDIT MODAL */}
       <EmployeeModal

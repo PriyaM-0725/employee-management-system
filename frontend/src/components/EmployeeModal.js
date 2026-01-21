@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { addEmployee, updateEmployee } from "../services/api";
 import { motion, AnimatePresence } from "framer-motion";
 
+// 🔹 Email validation helper
+const isValidEmail = (email) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 function EmployeeModal({ isOpen, onClose, refresh, editData }) {
   const [form, setForm] = useState({
     name: "",
@@ -11,7 +15,9 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
     salary: ""
   });
 
-  // Prefill form when editing
+  const [emailError, setEmailError] = useState("");
+
+  // 🔹 Prefill form when editing
   useEffect(() => {
     if (editData) {
       setForm({
@@ -21,12 +27,19 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
         position: editData.position,
         salary: editData.salary
       });
+      setEmailError("");
     }
   }, [editData]);
 
+  // 🔹 Submit handler
   const submitHandler = async () => {
     if (!form.name || !form.email) {
-      alert("Name and Email are required");
+      setEmailError("Name and Email are required");
+      return;
+    }
+
+    if (!isValidEmail(form.email)) {
+      setEmailError("Please enter a valid email address");
       return;
     }
 
@@ -51,8 +64,9 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
         position: "",
         salary: ""
       });
+      setEmailError("");
     } catch (err) {
-      alert("Operation failed");
+      setEmailError("Operation failed. Try again.");
     }
   };
 
@@ -82,12 +96,14 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.85, y: 50 }}
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-xl font-bold mb-4 text-purple-700">
                 {editData ? "Edit Employee" : "Add Employee"}
               </h2>
 
               <div className="space-y-3">
+                {/* NAME */}
                 <input
                   placeholder="Name"
                   className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
@@ -97,15 +113,38 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
                   }
                 />
 
+                {/* EMAIL */}
                 <input
+                  type="email"
                   placeholder="Email"
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  required
+                  className={`w-full border p-2 rounded focus:outline-none focus:ring-2 ${
+                    emailError
+                      ? "border-red-500 focus:ring-red-400"
+                      : "focus:ring-purple-400"
+                  }`}
                   value={form.email}
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setForm({ ...form, email: e.target.value });
+                    setEmailError("");
+                  }}
                 />
 
+                {/* ERROR MESSAGE */}
+                <AnimatePresence>
+                  {emailError && (
+                    <motion.p
+                      className="text-sm text-red-600"
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      {emailError}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+
+                {/* DEPARTMENT */}
                 <select
                   className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
                   value={form.department}
@@ -119,6 +158,7 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
                   <option value="finance">Finance</option>
                 </select>
 
+                {/* POSITION */}
                 <input
                   placeholder="Position"
                   className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
@@ -128,6 +168,7 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
                   }
                 />
 
+                {/* SALARY */}
                 <input
                   type="number"
                   placeholder="Salary"
@@ -139,6 +180,7 @@ function EmployeeModal({ isOpen, onClose, refresh, editData }) {
                 />
               </div>
 
+              {/* ACTIONS */}
               <div className="flex justify-end gap-3 mt-6">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
