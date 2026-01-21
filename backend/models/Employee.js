@@ -16,10 +16,12 @@ const employeeSchema = new mongoose.Schema(
       lowercase: true   // 🔹 auto-normalize
     },
     position: {
-      type: String
+      type: String,
+      required: true
     },
     salary: {
-      type: Number
+      type: Number,
+      required: true
     }
   },
   { timestamps: true }
